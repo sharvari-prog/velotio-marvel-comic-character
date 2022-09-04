@@ -1,5 +1,7 @@
 package com.velotio.marvel.comic.viewmodels
 
+import android.graphics.Movie
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -35,6 +37,7 @@ class MainViewModel(val repository: CharacterRepository) : ViewModel() {
         val md = MessageDigest.getInstance("MD5")
         return BigInteger(1, md.digest(input.toByteArray())).toString(16).padStart(32, '0')
     }
+
 
 
 }
