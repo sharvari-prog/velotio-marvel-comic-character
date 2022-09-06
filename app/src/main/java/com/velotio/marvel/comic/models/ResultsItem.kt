@@ -1,5 +1,8 @@
 package com.velotio.marvel.comic.models
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
 data class ResultsItem(val thumbnail: Thumbnail,
                        val urls: List<UrlsItem>?,
                        val stories: Stories,
@@ -10,4 +13,6 @@ data class ResultsItem(val thumbnail: Thumbnail,
                        val modified: String = "",
                        val id: Int = 0,
                        val resourceURI: String = "",
-                       val events: Events)
+                       val events: Events){
+
+}

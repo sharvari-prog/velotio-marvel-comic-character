@@ -4,22 +4,24 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
+import com.velotio.marvel.comic.models.ResultData
 import com.velotio.marvel.comic.models.ResultsItem
 import com.velotio.marvel.comic.views.ui.theme.VelotiosMarvelComicTheme
 
 @Composable
-fun CharacterListItem(listOfCharacters: ResultsItem){
+fun CharacterListItem(listOfCharacters: ResultData){
 
 
 //    VelotiosMarvelComicTheme{
@@ -31,8 +33,6 @@ fun CharacterListItem(listOfCharacters: ResultsItem){
         ) {
             Surface() {
 
-//            var imageUrl:String =listOfCharacters.thumbnail.path+"."+listOfCharacters.thumbnail.extension
-//            Log.e("@@ CharacterListItem", "CharacterListItem: $imageUrl" )
 
                 Row(
                     Modifier
@@ -42,7 +42,7 @@ fun CharacterListItem(listOfCharacters: ResultsItem){
 
                     Image(
                         painter = rememberImagePainter(
-                            data = listOfCharacters.thumbnail.path+"."+listOfCharacters.thumbnail.extension,
+                            data = listOfCharacters.imageUrl,
 
                             builder = {
                                 scale(coil.size.Scale.FILL)
@@ -69,20 +69,21 @@ fun CharacterListItem(listOfCharacters: ResultsItem){
                             Text(
                                 text = it,
                                 style = MaterialTheme.typography.subtitle1,
-                                fontWeight = FontWeight.Bold
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 16.sp
                             )
                         }
-                        Text(
-                            text = listOfCharacters.description,
-                            style = MaterialTheme.typography.caption,
-                            modifier = Modifier
-                                .background(
-                                    Color.LightGray
-                                )
-                                .padding(4.dp)
-                        )
+//                        Text(
+//                            text = listOfCharacters.description,
+//                            style = MaterialTheme.typography.caption,
+//                            modifier = Modifier
+//                                .background(
+//                                    Color.LightGray
+//                                )
+//                                .padding(4.dp)
+//                        )
 //                    Text(
-//                        text = "Hello 2",
+//                        text = listOfCharacters.id.toString(),
 //                        style = MaterialTheme.typography.body1,
 //                        maxLines = 2,
 //                        overflow = TextOverflow.Ellipsis

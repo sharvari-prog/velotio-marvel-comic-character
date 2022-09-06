@@ -15,7 +15,7 @@ interface CharacterService {
     suspend fun getListOfCharacter(
         @Query("ts") ts: String, @Query("apikey") apikey: String,
         @Query("hash") hash:String,@Query("limit") limit :Int
-    ): List<ResultsItem>
+    ): Response<ListOfCharacters>
 
 
     companion object{
@@ -25,7 +25,7 @@ interface CharacterService {
 
             if(characterService==null){
                 characterService=Retrofit.Builder()
-                    .baseUrl("")
+                    .baseUrl("http://gateway.marvel.com/v1/public/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build().create(CharacterService::class.java)
             }
