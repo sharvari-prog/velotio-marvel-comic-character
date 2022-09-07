@@ -3,16 +3,20 @@ package com.velotio.marvel.comic.models
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-data class ResultsItem(val thumbnail: Thumbnail,
-                       val urls: List<UrlsItem>?,
-                       val stories: Stories,
-                       val series: Series,
-                       val comics: Comics,
-                       val name: String = "",
-                       val description: String = "",
-                       val modified: String = "",
-                       val id: Int = 0,
-                       val resourceURI: String = "",
-                       val events: Events){
+@Entity(tableName = "result_data_table")
+data class ResultsItem(
+    @PrimaryKey
+    val id: Int,
+    val name: String = "",
+    val description: String = "",
+    val modified: String = "",
+) {
 
+
+
+//    val resourceURI: String = ""
+//    val events: Events = TODO()
+//    val thumbnail: Thumbnail
+//
+//    val comics: Comics
 }

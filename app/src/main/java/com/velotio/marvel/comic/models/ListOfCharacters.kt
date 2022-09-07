@@ -3,6 +3,7 @@ package com.velotio.marvel.comic.models
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+@Entity(tableName = "main_table")
 data class ListOfCharacters(
                             @PrimaryKey(autoGenerate = true)
                             var id:Int,

@@ -11,7 +11,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.velotio.marvel.comic.models.ResultData
 import com.velotio.marvel.comic.models.ResultsItem
 import com.velotio.marvel.comic.viewmodels.CharacterViewModel
 import com.velotio.marvel.comic.views.ui.theme.VelotiosMarvelComicTheme
@@ -40,7 +39,7 @@ class HomeActivity : ComponentActivity() {
 }
 
 @Composable
-fun listData(characterList: List<ResultData>) {
+fun listData(characterList: List<ResultsItem>) {
 
 
     LazyColumn {
