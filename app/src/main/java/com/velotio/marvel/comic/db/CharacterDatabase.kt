@@ -23,7 +23,7 @@ abstract class CharacterDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: CharacterDatabase? = null
         fun getDatabase(context: Context): CharacterDatabase {
-//            val mainConvertorInstance =MainConvertor(jsonParser = JsonParser1())
+            val mainConvertorInstance =MainConvertor()
 
 
             if (INSTANCE == null) {
@@ -31,8 +31,8 @@ abstract class CharacterDatabase : RoomDatabase() {
                     INSTANCE = Room.databaseBuilder(
                         context,
                         CharacterDatabase::class.java,
-                        "marvel_character_db"
-                    ).addTypeConverter(MainConvertor::class.java)
+                        "marvel_character_db.db"
+                    ).addTypeConverter(mainConvertorInstance)
                         .build()
                 }
             }
