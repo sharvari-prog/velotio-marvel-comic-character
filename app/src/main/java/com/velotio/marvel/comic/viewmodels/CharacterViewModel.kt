@@ -1,6 +1,6 @@
 package com.velotio.marvel.comic.viewmodels
 
-import android.security.identity.ResultData
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,12 +17,20 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.math.BigInteger
 import java.security.MessageDigest
+import java.text.SimpleDateFormat
+import java.util.*
 
 class CharacterViewModel : ViewModel() {
 
+
+
+    @SuppressLint("SimpleDateFormat")
+    var sdf: SimpleDateFormat = SimpleDateFormat("dd-MM-yyyy")
+    var currentDateAndTime: String = sdf.format(Date())
+
     private val apikey = "867cfda73983a9fff36e5cb99aac336d"
     private val privateKey = "bddd42d5a10b1864f6d4a35e9acbf027dec3ccb7"
-    private val ts = "11-09-2022"
+    private val ts = currentDateAndTime
     private val hash = getMD5Value(ts + privateKey + apikey)
 
     private val characterDatabase = CharacterApplication.database
@@ -39,25 +47,23 @@ class CharacterViewModel : ViewModel() {
     fun getCharacterList(isFromRefresh: Boolean): List<ResultsItem> {
         viewModelScope.launch {
 
-            Log.e("@@ ", "getCharacterList: $isFromRefresh")
             val characterService = CharacterService.getRetroFitApiInstance()
             try {
-
-
                 if (characterDatabase.characterDao().getDataCount()
                         .isNotEmpty() && !isFromRefresh
                 ) {
                     characterResponse = characterDatabase.characterDao().getDataCount()
-                    Log.e("@@ ** ", "getCharacterList: first if ")
+                    Log.e("@@@@   ", "getCharacterList: if" )
 
                 } else {
+
+                    Log.e("@@@@   ", "getCharacterList: else" )
 
                     val dataCount = characterDatabase.characterDao().getDataCount().size
                     var offSetCount = 100 + dataCount
                     if (dataCount == 0) {
                         offSetCount = 0
                     }
-                    Log.e("@@ ******** ", "getCharacterList: $offSetCount")
                     val listOfCharacters =
                         characterService.getListOfCharacter(ts, apikey, hash, 100, offSetCount)
                     characterResponse = listOfCharacters.body()?.data?.results!!

@@ -3,4 +3,6 @@
     <string name="title_activity_splash_screen">SplashScreenActivity</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_home">HomeActivity</string>
+    <string name="public_key">867cfda73983a9fff36e5cb99aac336d</string>
+    <string name="private_key">bddd42d5a10b1864f6d4a35e9acbf027dec3ccb7</string>
 </resources>

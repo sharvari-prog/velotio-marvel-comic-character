@@ -36,7 +36,7 @@ class HomeActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
 
-                    listData(characterList = mainViewModel.getCharacterList(false), this)
+                    listData(characterList = mainViewModel.getCharacterList(false))
 
                 }
             }
@@ -45,7 +45,7 @@ class HomeActivity : ComponentActivity() {
 }
 
 @Composable
-fun listData(characterList: List<ResultsItem>, context: Context) {
+fun listData(characterList: List<ResultsItem>) {
     val viewModel: CharacterViewModel = viewModel()
     val isRefreshing by viewModel.isRefreshing.collectAsState()
 
@@ -54,8 +54,8 @@ fun listData(characterList: List<ResultsItem>, context: Context) {
         onRefresh = { viewModel.getCharacterList(true) },
     ) {
         LazyColumn {
-            itemsIndexed(items = characterList) { index, item ->
-                CharacterListItem(itemOfResult = item, context)
+            itemsIndexed(items = characterList) { _, item ->
+                CharacterListItem(itemOfResult = item)
             }
         }
     }
