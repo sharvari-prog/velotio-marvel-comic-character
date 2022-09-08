@@ -6,6 +6,8 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.velotio.marvel.comic.models.Data
 import com.velotio.marvel.comic.models.ResultsItem
+import com.velotio.marvel.comic.models.Thumbnail
+import org.json.JSONObject
 import java.lang.reflect.Type
 import java.util.*
 import kotlin.collections.ArrayList
@@ -22,11 +24,6 @@ class MainConvertor(
 
         return gson.toJson(meaning)
 
-
-//        return jsonParser.toJson(
-//            meaning,
-//            object : TypeToken<ArrayList<ResultsItem>>() {}.type
-//        ) ?: "[]"
     }
 
     @TypeConverter
@@ -38,11 +35,6 @@ class MainConvertor(
             TypeToken<List<ResultsItem?>?>() {}.type
         return gson.fromJson<List<ResultsItem>>(data, listType)
 
-
-//        return jsonParser.fromJson<ArrayList<ResultsItem>>(
-//            json,
-//            object : TypeToken<ArrayList<ResultsItem>>() {}.type
-//        ) ?: emptyList()
     }
 
     @TypeConverter
@@ -53,6 +45,20 @@ class MainConvertor(
     @TypeConverter
     fun tvSource(name: List<ResultsItem>): Data {
         return Data(name)
+    }
+
+    @TypeConverter
+    fun fromSource(source: Thumbnail): String {
+        return JSONObject().apply {
+            put("path", source.path)
+            put("extension", source.extension)
+        }.toString()
+    }
+
+    @TypeConverter
+    fun toSource(source: String): Thumbnail {
+        val json = JSONObject(source)
+        return Thumbnail(json.getString("path"), json.getString("extension"))
     }
 
 

@@ -1,6 +1,7 @@
 package com.velotio.marvel.comic.models
 
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "result_data_table")
@@ -10,13 +11,10 @@ data class ResultsItem(
     val name: String = "",
     val description: String = "",
     val modified: String = "",
+    val thumbnail: Thumbnail,
+//    @Ignore
+//    val comics: Comics
 ) {
 
 
-
-//    val resourceURI: String = ""
-//    val events: Events = TODO()
-//    val thumbnail: Thumbnail
-//
-//    val comics: Comics
 }

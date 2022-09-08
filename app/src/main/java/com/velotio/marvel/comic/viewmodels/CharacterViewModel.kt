@@ -1,5 +1,6 @@
 package com.velotio.marvel.comic.viewmodels
 
+import android.security.identity.ResultData
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,6 +10,10 @@ import androidx.lifecycle.viewModelScope
 import com.velotio.marvel.comic.CharacterApplication
 import com.velotio.marvel.comic.api.CharacterService
 import com.velotio.marvel.comic.models.ResultsItem
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -24,51 +29,58 @@ class CharacterViewModel : ViewModel() {
 
     private var characterResponse: List<ResultsItem> by mutableStateOf(listOf())
 
-//    private var dbResponse: List<ResultData> by mutableStateOf(listOf())
+    private val _isRefreshing = MutableStateFlow(false)
+
+    val isRefreshing: StateFlow<Boolean>
+        get() = _isRefreshing.asStateFlow()
 
     private var errorMessage: String by mutableStateOf("")
 
-    fun getCharacterList(): List<ResultsItem> {
+    fun getCharacterList(isFromRefresh: Boolean): List<ResultsItem> {
         viewModelScope.launch {
 
+            Log.e("@@ ", "getCharacterList: $isFromRefresh")
             val characterService = CharacterService.getRetroFitApiInstance()
             try {
 
-                if (characterDatabase.characterDao().getDataCount().isNotEmpty()) {
 
+                if (characterDatabase.characterDao().getDataCount()
+                        .isNotEmpty() && !isFromRefresh
+                ) {
+                    characterResponse = characterDatabase.characterDao().getDataCount()
+                    Log.e("@@ ** ", "getCharacterList: first if ")
 
                 } else {
-                    val listOfCharacters = characterService.getListOfCharacter(ts, apikey, hash, 10)
+
+                    val dataCount = characterDatabase.characterDao().getDataCount().size
+                    var offSetCount = 100 + dataCount
+                    if (dataCount == 0) {
+                        offSetCount = 0
+                    }
+                    Log.e("@@ ******** ", "getCharacterList: $offSetCount")
+                    val listOfCharacters =
+                        characterService.getListOfCharacter(ts, apikey, hash, 100, offSetCount)
                     characterResponse = listOfCharacters.body()?.data?.results!!
 
                     characterDatabase.characterDao().addData(listOfCharacters.body()!!)
+                    for (i in characterResponse.indices) {
+                        GlobalScope.launch {
+                            characterDatabase.characterDao()
+                                .addResultDataTable(characterResponse[i])
+                            characterDatabase.characterDao()
+                                .addThumbnailData(characterResponse[i].thumbnail)
+                        }
 
-//                    for (i in characterResponse.indices) {
-//                        var imageUrl =
-//                            characterResponse[i].thumbnail.path + "." + characterResponse[i].thumbnail.extension
-//
-//                        val resultData = ResultData(
-//                            characterResponse[i].id, characterResponse[i].name,
-//                            characterResponse[i].description, imageUrl
-//                        )
-//                        GlobalScope.launch {
-//
-//                            characterDatabase.characterDao().addData(resultData)
-//                            dbResponse.toMutableList().add(resultData)
-//                        }
-//
-//                    }
+                    }
                 }
 
             } catch (e: Exception) {
                 errorMessage = e.message.toString()
-                Log.e("@@ Exception ", "getCharacterList: " + e.message)
 
             }
 
 
         }
-//        Log.e("@@ Size of dbResponse", "getCharacterList: " + dbResponse.size)
         return characterResponse
     }
 

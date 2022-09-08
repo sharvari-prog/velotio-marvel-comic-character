@@ -1,5 +1,6 @@
 package com.velotio.marvel.comic.views
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -9,8 +10,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.velotio.marvel.comic.models.ResultsItem
 import com.velotio.marvel.comic.viewmodels.CharacterViewModel
 import com.velotio.marvel.comic.views.ui.theme.VelotiosMarvelComicTheme
@@ -30,7 +36,7 @@ class HomeActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
 
-                    listData(characterList = mainViewModel.getCharacterList())
+                    listData(characterList = mainViewModel.getCharacterList(false), this)
 
                 }
             }
@@ -39,20 +45,23 @@ class HomeActivity : ComponentActivity() {
 }
 
 @Composable
-fun listData(characterList: List<ResultsItem>) {
+fun listData(characterList: List<ResultsItem>, context: Context) {
+    val viewModel: CharacterViewModel = viewModel()
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
 
-
-    LazyColumn {
-        itemsIndexed(items = characterList) { index, item ->
-            CharacterListItem(listOfCharacters = item)
+    SwipeRefresh(
+        state = rememberSwipeRefreshState(isRefreshing),
+        onRefresh = { viewModel.getCharacterList(true) },
+    ) {
+        LazyColumn {
+            itemsIndexed(items = characterList) { index, item ->
+                CharacterListItem(itemOfResult = item, context)
+            }
         }
     }
+
+
 }
-
-
-
-
-
 
 @Composable
 fun Greeting(name: String) {

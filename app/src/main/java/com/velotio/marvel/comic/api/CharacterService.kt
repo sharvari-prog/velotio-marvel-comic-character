@@ -14,7 +14,7 @@ interface CharacterService {
     @GET("characters")
     suspend fun getListOfCharacter(
         @Query("ts") ts: String, @Query("apikey") apikey: String,
-        @Query("hash") hash:String,@Query("limit") limit :Int
+        @Query("hash") hash:String,@Query("limit") limit :Int,@Query("offset") offset :Int
     ): Response<ListOfCharacters>
 
 

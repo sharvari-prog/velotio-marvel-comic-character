@@ -9,7 +9,7 @@ import com.velotio.marvel.comic.models.*
 import com.velotio.marvel.comic.utills.MainConvertor
 
 @Database(
-    entities = [ListOfCharacters::class, Data::class, ResultsItem::class],
+    entities = [ListOfCharacters::class, Data::class, ResultsItem::class,Thumbnail::class],
     version = 1,
     exportSchema = false
 )
